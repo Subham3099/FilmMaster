@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie CRUD App</title>
+    <link rel="icon" type="image/png" href="/static/icon.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-image: url('/static/1i.jpg'); /* Replace 'your-image.jpg' with the actual image file name */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; /* Ensure the body takes up the full height of the viewport */
+        }
+
+        #sidebar {
+            width: 300px;
+            height: 100vh;
+            background-color: #0e172a;
+            color: white;
+            padding-top: 20px;
+        }
+
+        #main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h2, h3 {
+            color: #000000;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section {
+            display: none;
+            padding: 50px;
+            align-self: center;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1000px; /* Adjust the max-width as needed */
+        }
+        .section:hover {
+            background-color: #e0e0e0;
+        }
+
+        #fetchResult {
+            margin-top: 10px;
+            color: #333;
+        }
+
+        table {
+            width: 900px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #67ca54;
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #movies-container {
+            display: 50px;
+            align-self: left;
+            flex-wrap: wrap;
+            max-height: 800px; /* Adjust the height according to your needs */
+            overflow: auto;
+        }
+
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: box-shadow 0.3s;
+        }
+
+        .movie-card p {
+            margin: 10px 0;
+        }
+
+        .movie-card button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .movie-card button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Center and style the forms */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        form input {
+            width: 500px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="text-center">
+        <h3 style="color: #ffffff;">Movie CRUD App <p/>Menu</h3>
+        <button class="btn btn-light btn-block mb-2" onclick="showSection('addMovieSection')">Add Movie</button>
+        <button class="btn btn-light btn-block mb-2" onclick="showSection('updateMovieSection')">Update Movie</button>
+        <button class="btn btn-light btn-block mb-2" onclick="showSection('fetchMovieSection')">Fetch Movie</button>
+        <button class="btn btn-light btn-block mb-2" onclick="showSection('deleteMovieSection')">Delete Movie</button>
+        <button class="btn btn-light btn-block" onclick="showSection('allMovieSection')">All Movies</button>
+    </div>
+
+    <!-- Add Movie Form -->
+		<div id="addMovieSection" class="section">
+		<h3>Add Movie</h3>
+        <form id="addMovieForm" >
+            <label for="title">Title:</label>
+            <input type="text" id="title" required>
+            <p/>
+            <label for="isbn">                         ISBN               :</label>
+            <input type="text" id="isbn" required>
+            <p/>
+            <label for="directorFirstName">            Director First Name:</label>
+            <input type="text" id="directorFirstName" required>
+            <p/>
+            <label for="directorLastName">             Director Last Name :</label>
+            <input type="text" id="directorLastName" required>
+            <p/>
+            <button type="submit">Add Movie</button>
+        </form>
+		</div>
+
+    <!-- Update Movie Form -->
+		<div id="updateMovieSection" class="section">
+		<h3>Update Movie</h3>
+        <form id="updateMovieForm">
+            <label for="updateId">Movie ID:</label>
+            <input type="text" id="updateId" required>
+
+            <label for="updateTitle">Title:</label>
+            <input type="text" id="updateTitle" required>
+
+            <label for="updateIsbn">ISBN:</label>
+            <input type="text" id="updateIsbn" required>
+
+            <label for="updateDirectorFirstName">Director First Name:</label>
+            <input type="text" id="updateDirectorFirstName" required>
+
+            <label for="updateDirectorLastName">Director Last Name:</label>
+            <input type="text" id="updateDirectorLastName" required>
+            <p/>
+            <button type="submit">Update Movie</button>
+        </form>
+		</div>
+
+    <!-- Fetch Movie Form -->
+	<div id="fetchMovieSection" class="section">
+		<h3>Fetch Movie</h3>
+        <form id="fetchMovieForm">
+            <label for="fetchId">Movie ID:</label>
+            <input type="text" id="fetchId" required>
+            <p/>
+            <button type="submit">Fetch Movie</button>
+            <p id="fetchResult"></p>
+        </form>
+	</div>
+
+    <!-- Delete Movie Form -->
+	<div id="deleteMovieSection" class="section">
+		<h3>Delete Movie</h3>
+        <form id="deleteMovieForm">
+            <label for="deleteId">Movie ID:</label>
+            <input type="text" id="deleteId" required>
+            <p/>
+            <button type="submit">Delete Movie</button>
+        </form>
+	</div>
+    
+	<div id="allMovieSection" class="section">
+	<h3><center>All Movies</center></h3></summary>
+		<div id="movies-container"></div>
+	</div>
+    
+    </center>
+    <script>
+        	function showSection(sectionId) {
+				// Hide all sections
+				document.querySelectorAll('.section').forEach(section => {
+					section.style.display = 'none';
+				});
+
+				// Show the selected section
+				document.getElementById(sectionId).style.display = 'block';
+			}
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to fetch and display movies
+            function fetchMovies() {
+                fetch('/movies')
+                    .then(response => response.json())
+                    .then(data => {
+                        const moviesContainer = document.getElementById('movies-container');
+                        moviesContainer.innerHTML = '';
+
+                        const init = document.createElement('div');
+
+                        init.innerHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">ID</th>
+                                    <th style="width: 20%;">Title</th>
+                                    <th style="width: 15%;">ISBN</th>
+                                    <th style="width: 30%;">Director</th>
+                                    <th style="width: 15%;">Delete</th>
+                                </tr>
+                            </thead>
+                        </table>
+						`;
+                        moviesContainer.appendChild(init);
+                        data.forEach(movie => {
+                            const movieDiv = document.createElement('div');
+                            movieDiv.innerHTML = `
+                            <table>
+								<tr>
+									<td style="width: 10%;">${movie.id}</td>
+									<td style="width: 20%;">${movie.title}</td>
+									<td style="width: 15%;">${movie.isbn}</td>
+									<td style="width: 30%;">${movie.director.firstname} ${movie.director.lastname}</td>
+                                    <td style="width: 15%;"><button onclick="deleteMovie('${movie.id}')">Delete</button></td>
+								</tr>
+                            </table>
+                           
+						`;
+                            moviesContainer.appendChild(movieDiv);
+                        });
+
+                    });
+            }
+        
+            document.getElementById('updateMovieForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const idToUpdate = document.getElementById('updateId').value;
+                const updateTitle = document.getElementById('updateTitle').value;
+                const updateIsbn = document.getElementById('updateIsbn').value;
+                const updateDirectorFirstName = document.getElementById('updateDirectorFirstName').value;
+                const updateDirectorLastName = document.getElementById('updateDirectorLastName').value;
+
+                    fetch(`/movies/${idToUpdate}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            title: updateTitle,
+                            isbn: updateIsbn,
+                            director: {
+                                firstname: updateDirectorFirstName,
+                                lastname: updateDirectorLastName,
+                            },
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        fetchMovies();
+                        // Clear the update form after submission
+                        document.getElementById('updateMovieForm').reset();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            });
+
+            // Function to fill the update form fields when selecting a movie for update
+            window.fillUpdateForm = function (id) {
+                const movieToUpdate = movies.find(movie => movie.id === id);
+                if (movieToUpdate) {
+                    document.getElementById('updateId').value = movieToUpdate.id;
+                    document.getElementById('updateTitle').value = movieToUpdate.title;
+                    document.getElementById('updateIsbn').value = movieToUpdate.isbn;
+                    document.getElementById('updateDirectorFirstName').value = movieToUpdate.director.firstname;
+                    document.getElementById('updateDirectorLastName').value = movieToUpdate.director.lastname;
+                }
+            };
+
+            document.getElementById('updateMovieForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const idToUpdate = document.getElementById('updateId').value;
+                const updateTitle = document.getElementById('updateTitle').value;
+                const updateIsbn = document.getElementById('updateIsbn').value;
+                const updateDirectorFirstName = document.getElementById('updateDirectorFirstName').value;
+                const updateDirectorLastName = document.getElementById('updateDirectorLastName').value;
+
+                fetch(`/movies/${idToUpdate}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: updateTitle,
+                        isbn: updateIsbn,
+                        director: {
+                            firstname: updateDirectorFirstName,
+                            lastname: updateDirectorLastName,
+                        },
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        fetchMovies();
+                        // Clear the update form after submission
+                        document.getElementById('updateMovieForm').reset();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            });
+            // Function to delete a movie
+            document.getElementById('deleteMovieForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const idToDelete = document.getElementById('deleteId').value;
+
+                fetch(`/movies/${idToDelete}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        fetchMovies();
+                        // Clear the delete form after submission
+                        document.getElementById('deleteMovieForm').reset();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            });
+            // Function to fill the update form fields when selecting a movie for update
+            window.fillUpdateForm = function (id) {
+                const movieToUpdate = movies.find(movie => movie.id === id);
+                if (movieToUpdate) {
+                    document.getElementById('updateId').value = movieToUpdate.id;
+                    document.getElementById('updateTitle').value = movieToUpdate.title;
+                    document.getElementById('updateIsbn').value = movieToUpdate.isbn;
+                    document.getElementById('updateDirectorFirstName').value = movieToUpdate.director.firstname;
+                    document.getElementById('updateDirectorLastName').value = movieToUpdate.director.lastname;
+                }
+            };
+
+            // Function to add a new movie
+            document.getElementById('addMovieForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const title = document.getElementById('title').value;
+                const isbn = document.getElementById('isbn').value;
+                const directorFirstName = document.getElementById('directorFirstName').value;
+                const directorLastName = document.getElementById('directorLastName').value;
+
+                fetch('/movies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        isbn: isbn,
+                        director: {
+                            firstname: directorFirstName,
+                            lastname: directorLastName,
+                        },
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        fetchMovies();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            });
+
+            // Function to delete a movie
+            window.deleteMovie = function (id) {
+                fetch(`/movies/${id}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        fetchMovies();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            };
+			
+			// Function to fetch a movie by ID
+            document.getElementById('fetchMovieForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const idToFetch = document.getElementById('fetchId').value;
+
+                fetch(`/movies/${idToFetch}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Movie not found');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const fetchResult = document.getElementById('fetchResult');
+                        fetchResult.innerHTML = `
+                            Found Movie:
+                            <p/>
+                            <div>
+							<table>
+								<tr>
+									<th>ID</th>
+									<td>${data.id}</td>
+								</tr>
+								<tr>
+									<th>Title</th>
+									<td>${data.title}</td>
+								</tr>
+								<tr>
+									<th>ISBN</th>
+									<td>${data.isbn}</td>
+								</tr>
+								<tr>
+									<th>Director</th>
+									<td>${data.director.firstname} ${data.director.lastname}</td>
+								</tr>
+							</table>
+                            <p/>
+                        `;
+                    })
+                    .catch((error) => {
+                        const fetchResult = document.getElementById('fetchResult');
+                        fetchResult.textContent = 'Movie not found';
+                        console.error('Error:', error);
+                    });
+            });
+
+            // Initial fetch and display
+            fetchMovies();
+        });
+    </script>
+</body>
+</html>
