@@ -8,8 +8,8 @@ Update: Modify existing movie details.
 Delete: Remove a movie from the database.
 
 -> Technologies Used
-GoLang: Backend language for handling server logic and database operations.
-Gorilla Mux: Router for mapping HTTP requests to the corresponding handler.
+GoLang: Backend language for handling server logic and database operations.\n
+Gorilla Mux: Router for mapping HTTP requests to the corresponding handler.\n
 JSON: Data interchange format used for communication between client and server.
 REST API: Follows Representational State Transfer principles for interaction between systems.
 CORS Middleware: Cross-Origin Resource Sharing middleware for enabling communication with different origins.
