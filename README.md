@@ -2,7 +2,7 @@
 This repository contains a simple CRUD (Create, Read, Update, Delete) application for managing movies using GoLang for the backend and a REST API.
 
 -> Features
-Create: Add new movies to the database.
+Create: Add new movies to the database.<br>
 Read: Retrieve a list of all movies or a specific movie by ID.
 Update: Modify existing movie details.
 Delete: Remove a movie from the database.
