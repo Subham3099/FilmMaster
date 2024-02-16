@@ -1,5 +1,5 @@
 # Movie CRUD App using GoLang and REST API<br>
-This repository contains a simple CRUD (Create, Read, Update, Delete) application for managing movies using GoLang for the backend and a REST API.<br><br>
+This repository contains a simple CRUD (Create, Read, Update, Delete) application for managing movies using GoLang for the backend and RESTful APIs.<br><br>
 
 -> Features<br>
 Create: Add new movies to the database.<br>
