@@ -1,4 +1,4 @@
-# Movie CRUD App using GoLang and RESTful APIs<br>
+# FilmMaster: Simplifying Movie Management and Exploration using GoLang and RESTful APIs<br>
 This repository contains a simple CRUD (Create, Read, Update, Delete) application for managing movies using GoLang for the backend and RESTful APIs.<br><br>
 
 -> Features<br>
